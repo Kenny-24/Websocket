@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+  </head>
+  <body>
+    <script type="module">
+      const name = "test"; //连接用户名
+      let wsUrl = "ws://127.0.0.1:1024/ws/?name=" + name;
+      const ws = new WebSocket(wsUrl);
+      ws.onopen = function (e) {
+        console.log("开启");
+        ws.send(
+          JSON.stringify({
+            ModeCode: "message",
+            msg: "hello",
+          })
+        );
+      }; //连接上时回调
+      ws.onclose = function (e) {
+        console.log("关闭");
+      }; //断开连接时回调
+      ws.onmessage = function (e) {
+        // Blob解析成字符串
+        e.data.text().then((data) => {
+          console.log("收到消息" + JSON.parse(data).msg);
+        });
+        // let data = JSON.parse(e.data);
+        ws.close();
+      }; //收到服务端消息
+      ws.onerror = function (e) {
+        console.log("出错");
+      }; //连接出错
+    </script>
+  </body>
+</html>
