@@ -4,6 +4,9 @@ const port = 1024; //端口
 const pathname = "/ws/"; //访问路径
 const server = http.createServer();
 
+server.listen(port, () => {
+  console.log("服务开启");
+});
 class WebSocketServer extends WebSocket.Server {
   constructor() {
     super(...arguments);
@@ -28,7 +31,7 @@ class WebSocketServer extends WebSocket.Server {
     let data = JSON.parse(e);
     switch (data.ModeCode) {
       case "message":
-        console.log("收到消息" + data.msg);
+        console.log("收到消息:" + data.msg + "，ModeCode:" + data.ModeCode);
         this.send(e);
         break;
       case "heart_beat":
@@ -85,9 +88,6 @@ server.on("upgrade", (req, socket, head) => {
     webSocketServer.addClient(ws);
     webSocketServer.ws = ws;
   });
-});
-server.listen(port, () => {
-  console.log("服务开启");
 });
 
 //验证url标准
